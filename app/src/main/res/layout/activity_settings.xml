@@ -1,43 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    tools:context=".Settings">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:paddingBottom="4dp"
-        android:paddingEnd="52dp"
-        android:paddingTop="4dp"
-        android:paddingStart="4dp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-        <ImageButton
-            android:id="@+id/settings_back_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:contentDescription="Pop from this screen"
-            android:src="@drawable/arrow_back"
-            android:background="@color/transparent"
-            >
-        </ImageButton>
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/setting_title"
-            android:textColor="@color/black"
-            android:textSize="22sp"
-            android:textFontWeight="500">
-        </TextView>
-    </LinearLayout>
+            android:layout_height="56dp"
+            android:paddingBottom="4dp"
+            android:paddingEnd="52dp"
+            android:paddingTop="4dp"
+            android:paddingStart="4dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <ImageButton
+                android:id="@+id/settings_back_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="Pop from this screen"
+                android:src="@drawable/arrow_back"
+                android:background="@color/transparent"
+                >
+            </ImageButton>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_title"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:textFontWeight="500">
+            </TextView>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="61dp"
@@ -135,4 +136,5 @@
 
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,13 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PlaylistMaker">
         <activity
+            android:name=".Settings"
+            android:exported="false" />
+        <activity
             android:name=".Search"
             android:exported="false" />
         <activity
             android:name=".Media"
-            android:exported="false" />
-        <activity
-            android:name=".Settings"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
