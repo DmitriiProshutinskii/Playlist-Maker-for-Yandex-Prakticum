@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -15,13 +16,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val searchClickListener: View.OnClickListener = object : View.OnClickListener {
             override fun onClick(v: View?) {
-                Toast.makeText(this@MainActivity, "Нажали на поиск!", Toast.LENGTH_SHORT).show()
+                val searchIntent = Intent(v?.context, Search::class.java)
+                startActivity(searchIntent)
             }
         }
         search.setOnClickListener(searchClickListener)
 
         media.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Нажали на Медиа!", Toast.LENGTH_SHORT).show()
+            val mediaIntent = Intent(this, Media::class.java)
+            startActivity(mediaIntent)
         }
 
     }
@@ -29,7 +32,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.settings_button -> {
-                Toast.makeText(this, "Нажали на настройки!", Toast.LENGTH_SHORT).show()
+                val settingsIntent = Intent(this, Settings::class.java)
+                startActivity(settingsIntent)
             }
         }
     }

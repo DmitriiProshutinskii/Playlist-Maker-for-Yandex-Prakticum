@@ -77,8 +77,9 @@
                 android:textColor="@color/black">
             </TextView>
             <ImageButton
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="TODO"
                 android:src="@drawable/share"
                 android:background="@color/transparent">
             </ImageButton>
