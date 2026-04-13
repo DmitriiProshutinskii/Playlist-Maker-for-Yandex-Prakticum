@@ -9,6 +9,7 @@
     tools:context=".SettingsActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/settings_toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:paddingBottom="4dp"
@@ -16,107 +17,41 @@
         android:paddingTop="4dp"
         android:paddingStart="4dp"
         app:layout_constraintTop_toTopOf="parent"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
         app:navigationIcon="@drawable/arrow_back"
         app:title="@string/setting_title"
         app:titleTextColor="@color/black">
     </com.google.android.material.appbar.MaterialToolbar>
-    <LinearLayout
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="6dp">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/dark_theme"
-            android:layout_weight="1"
-            android:textSize="16sp"
-            android:textFontWeight="400"
-            android:textColor="@color/black">
-        </TextView>
-        <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </ToggleButton>
-    </LinearLayout>
-
-    <LinearLayout
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="20dp"
+        android:text="@string/dark_theme"
+        android:textSize="16sp" />
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="12dp">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/share_app"
-            android:layout_weight="1"
-            android:textSize="16sp"
-            android:textFontWeight="400"
-            android:textColor="@color/black">
-        </TextView>
-        <ImageButton
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:contentDescription="TODO"
-            android:src="@drawable/share"
-            android:background="@color/transparent">
-        </ImageButton>
-    </LinearLayout>
-
-    <LinearLayout
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/share"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="20dp"
+        android:text="@string/share_app"
+        android:textSize="16sp" />
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="12dp">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/write_to_support"
-            android:layout_weight="1"
-            android:textSize="16sp"
-            android:textFontWeight="400"
-            android:textColor="@color/black">
-        </TextView>
-        <ImageButton
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/support"
-            android:background="@color/transparent">
-        </ImageButton>
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/support"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="20dp"
+        android:text="@string/write_to_support"
+        android:textSize="16sp" />
 
-    <LinearLayout
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="12dp">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/terms_of_use"
-            android:layout_weight="1"
-            android:textSize="16sp"
-            android:textFontWeight="400"
-            android:textColor="@color/black">
-        </TextView>
-        <ImageButton
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/chevron_right"
-            android:background="@color/transparent">
-        </ImageButton>
-    </LinearLayout>
-
-
-
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/chevron_right"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="20dp"
+        android:text="@string/terms_of_use"
+        android:textSize="16sp" />
 </LinearLayout>
