@@ -3,7 +3,6 @@ package com.practicum.playlistmaker
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
@@ -17,20 +16,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val searchClickListener: View.OnClickListener = object : View.OnClickListener {
             override fun onClick(v: View?) {
-                val searchIntent = Intent(v?.context, Search::class.java)
-                startActivity(searchIntent)
+                val searchActivityIntent = Intent(v?.context, SearchActivity::class.java)
+                startActivity(searchActivityIntent)
             }
         }
         search.setOnClickListener(searchClickListener)
 
         media.setOnClickListener {
-            val mediaIntent = Intent(this, Media::class.java)
-            startActivity(mediaIntent)
+            val mediaActivityIntent = Intent(this, MediaActivity::class.java)
+            startActivity(mediaActivityIntent)
         }
 
         settings.setOnClickListener {
-            val settingsIntent = Intent(this, Settings::class.java)
-            startActivity(settingsIntent)
+            val settingsActivityIntent = Intent(this, SettingsActivity::class.java)
+            startActivity(settingsActivityIntent)
         }
 
     }
