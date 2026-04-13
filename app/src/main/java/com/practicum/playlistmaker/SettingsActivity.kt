@@ -20,7 +20,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val backButton = findViewById<ImageButton>(R.id.settings_back_button)
         backButton.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            finish()
         }
     }
 }
