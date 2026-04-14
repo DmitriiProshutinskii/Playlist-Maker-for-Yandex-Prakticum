@@ -1,78 +1,90 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:background="#3772E7"
     android:gravity="center_horizontal"
-    android:padding="16dp"
-    android:background="#3772E7">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
-    <LinearLayout
+
+    <com.google.android.material.appbar.MaterialToolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/playlist_maker"
-            android:textSize="22dp"
-            android:textColor="@color/white"
-            android:paddingTop = "10dp"
-            android:paddingStart="12dp"
-            android:paddingBottom="12dp"
-            android:paddingEnd="62dp">
-        </TextView>
-    </LinearLayout>
+        android:layout_height="56dp"
+        android:layout_gravity="start"
+        android:layout_marginEnd="52dp"
+        android:layout_marginBottom="24dp"
+        android:paddingStart="4dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="52dp"
+        android:paddingBottom="4dp"
+        app:title="@string/playlist_maker"
+        app:titleMarginBottom="12dp"
+        app:titleMarginStart="12dp"
+        app:titleMarginTop="10dp"
+        app:titleTextColor="@color/white" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/search_button"
-        android:foreground="?attr/selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:elegantTextHeight="true"
         android:fontFamily="@font/audiowide"
-        android:text="Поиск"
+        android:foreground="?attr/selectableItemBackground"
+        android:insetLeft="16dp"
+        android:insetRight="16dp"
+        android:insetBottom="16dp"
+        android:text="@string/Search"
         android:textColor="@color/black"
         android:textFontWeight="500"
-        android:elegantTextHeight="true"
-        android:textSize="22dp"
+        android:textSize="22sp"
         app:backgroundTint="@color/white"
         app:cornerRadius="16dp"
         app:icon="@drawable/search"
-        app:iconSize="24dp"
         app:iconGravity="textStart"
+        app:iconSize="24dp"
         app:iconTint="@color/black" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/media_button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:insetBottom="16dp"
+        android:insetRight="16dp"
+        android:insetLeft="16dp"
         android:layout_weight="1"
-        android:textFontWeight="500"
-        android:text="Медиатека"
+        android:text="@string/Media"
         android:textColor="@color/black"
-        android:textSize="22dp"
+        android:textFontWeight="500"
+        android:textSize="22sp"
         app:backgroundTint="@color/white"
         app:cornerRadius="16dp"
-        app:iconSize="24dp"
         app:icon="@drawable/music"
         app:iconGravity="textStart"
+        app:iconSize="24dp"
         app:iconTint="@color/black" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settings_button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:insetBottom="24dp"
+        android:insetRight="16dp"
+        android:insetLeft="16dp"
         android:layout_weight="1"
         android:fontFamily="@font/audiowide"
-        android:text="Настройки"
-        android:textFontWeight="500"
+        android:text="@string/Settings"
         android:textColor="@color/black"
-        android:textSize="22dp"
+        android:textFontWeight="500"
+        android:textSize="22sp"
         app:backgroundTint="@color/white"
         app:cornerRadius="16dp"
-        app:iconSize="24dp"
         app:icon="@drawable/settings"
         app:iconGravity="textStart"
+        app:iconSize="24dp"
         app:iconTint="@color/black" />
 
 
