@@ -5,6 +5,7 @@
     <color name="transparent">#00000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="YPTextGray">#AEAFB4</color>
+    <color name="YPLightGray">#E6E8EB</color>
     <color name="YPBlue">#3772E7</color>
     <color name="YPBlueLight">#9FBBF3</color>
 
@@ -15,4 +16,7 @@
     <color name="settingsIcon">@color/YPTextGray</color>
     <color name="settingsText">@color/onSurface</color>
     <color name="onSurface">@color/YPBlack</color>
+    <color name="searchBarSurface">@color/YPLightGray</color>
+    <color name="searchBarOnSurface">@color/YPTextGray</color>
+    <color name="searchBarOnSurfaceAlt">@color/YPTextGray</color>
 </resources>
