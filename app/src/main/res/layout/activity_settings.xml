@@ -23,16 +23,19 @@
         app:trackTint="@color/trackTint" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/share_app_button"
         style="@style/SettingsLine"
         android:drawableEnd="@drawable/share"
         android:text="@string/share_app" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/support_button"
         style="@style/SettingsLine"
         android:drawableEnd="@drawable/support"
         android:text="@string/write_to_support" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/terms_button"
         style="@style/SettingsLine"
         android:drawableEnd="@drawable/chevron_right"
         android:text="@string/terms_of_use" />
