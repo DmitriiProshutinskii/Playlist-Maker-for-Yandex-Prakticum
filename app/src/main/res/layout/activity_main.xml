@@ -4,7 +4,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3772E7"
+    android:background="@color/mainActivityBg"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".MainActivity">
@@ -21,19 +21,19 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/search_button"
         style="@style/MainScreenButton"
-        android:text="@string/Search"
+        android:text="@string/search"
         app:icon="@drawable/search"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/media_button"
         style="@style/MainScreenButton"
-        android:text="@string/Media"
+        android:text="@string/media"
         app:icon="@drawable/music"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settings_button"
         style="@style/MainScreenButton"
-        android:text="@string/Settings"
+        android:text="@string/settings"
         android:insetBottom="24dp"
         app:icon="@drawable/settings"/>
 

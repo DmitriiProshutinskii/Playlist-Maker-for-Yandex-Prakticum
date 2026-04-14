@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="@color/surface"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -12,53 +13,27 @@
         android:id="@+id/settings_toolbar"
         style="@style/PlaylistToolbar"
         app:navigationIcon="@drawable/arrow_back"
-        app:title="@string/setting_title"/>
+        app:title="@string/settings"/>
 
     <com.google.android.material.switchmaterial.SwitchMaterial
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/SettingsLine"
         android:checked="true"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="20dp"
         android:text="@string/dark_theme"
-        android:fontFamily="@font/ys_display_regular"
-        android:textColor="@color/black"
-        android:textColorHighlight="@color/black"
         app:thumbTint="@color/thumbTint"
-        app:trackTint="@color/trackTint"
-        android:textSize="16sp" />
+        app:trackTint="@color/trackTint" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/SettingsLine"
         android:drawableEnd="@drawable/share"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="20dp"
-        android:text="@string/share_app"
-        android:fontFamily="@font/ys_display_regular"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:text="@string/share_app" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/SettingsLine"
         android:drawableEnd="@drawable/support"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="20dp"
-        android:text="@string/write_to_support"
-        android:fontFamily="@font/ys_display_regular"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:text="@string/write_to_support" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/SettingsLine"
         android:drawableEnd="@drawable/chevron_right"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="20dp"
-        android:text="@string/terms_of_use"
-        android:fontFamily="@font/ys_display_regular"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:text="@string/terms_of_use" />
 </LinearLayout>

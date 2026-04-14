@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mainActivityBg">@color/YPBlack</color>
+    <color name="thumbTint">@color/YPBlue</color>
+    <color name="trackTint">@color/YPBlueLight</color>
+    <color name="surface">#1A1B22</color>
+    <color name="settingsIcon">@color/white</color>
+    <color name="onSurface">@color/white</color>
+</resources>
