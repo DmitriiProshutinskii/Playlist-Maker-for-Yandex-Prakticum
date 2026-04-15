@@ -75,7 +75,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_DEF = ""
     }
     private fun hideKeyboard() {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(searchEditText.windowToken, 0)
     }
 }
