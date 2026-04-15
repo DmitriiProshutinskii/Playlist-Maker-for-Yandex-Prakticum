@@ -18,6 +18,7 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var searchEditText: EditText
     private lateinit var clearButton: ImageView
+    private var searchValue: String = SEARCH_DEF
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +47,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
+                searchValue = s.toString()
                 // TODO: perform search
             }
 
@@ -53,6 +55,25 @@ class SearchActivity : AppCompatActivity() {
         })
     }
 
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        searchEditText = findViewById(R.id.search_edit_text)
+        outState.putString(SEARCH_VALUE, searchValue)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        searchEditText = findViewById(R.id.search_edit_text)
+        searchValue = savedInstanceState.getString(SEARCH_VALUE, SEARCH_DEF)
+        searchEditText.setText(searchValue)
+    }
+
+    companion object {
+        const val SEARCH_VALUE = "SEARCH_VALUE"
+        const val SEARCH_DEF = ""
+    }
     private fun hideKeyboard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(searchEditText.windowToken, 0)
