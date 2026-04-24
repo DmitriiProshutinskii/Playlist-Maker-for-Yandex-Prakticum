@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="MainScreenButton" parent="TextAppearance.MaterialComponents.Button">
+    <style name="MainScreenButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:insetBottom">16dp</item>
         <item name="android:insetRight">16dp</item>
         <item name="android:insetLeft">16dp</item>

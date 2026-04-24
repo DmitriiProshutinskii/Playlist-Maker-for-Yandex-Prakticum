@@ -22,20 +22,20 @@
         android:id="@+id/search_button"
         style="@style/MainScreenButton"
         android:text="@string/search"
-        app:icon="@drawable/search"/>
+        app:icon="@drawable/ic_search_24"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/media_button"
         style="@style/MainScreenButton"
         android:text="@string/media"
-        app:icon="@drawable/music"/>
+        app:icon="@drawable/ic_music_24"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settings_button"
         style="@style/MainScreenButton"
         android:text="@string/settings"
         android:insetBottom="24dp"
-        app:icon="@drawable/settings"/>
+        app:icon="@drawable/ic_settings_24"/>
 
 
 </LinearLayout>

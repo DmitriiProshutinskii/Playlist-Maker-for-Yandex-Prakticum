@@ -7,6 +7,6 @@
     <color name="settingsIcon">@color/white</color>
     <color name="onSurface">@color/white</color>
     <color name="searchBarSurface">@color/white</color>
-    <color name="searchBarOnSurface">@color/black</color>
+    <color name="searchBarOnSurface">@color/YPBlack</color>
     <color name="searchBarOnSurfaceAlt">@color/YPTextGray</color>
 </resources>
