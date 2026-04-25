@@ -11,11 +11,12 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/search_toolbar"
         style="@style/PlaylistToolbar"
-        app:navigationIcon="@drawable/ic_arrow_back_24"
-        app:title="@string/search"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back_24"
+        app:title="@string/search" />
 
     <FrameLayout
         android:id="@+id/search_container"
@@ -53,6 +54,7 @@
             android:singleLine="true"
             android:textColor="@color/YPBlack"
             android:textColorHint="@color/searchBarOnSurface"
+            android:textCursorDrawable="@drawable/cursor_blue"
             android:textSize="16sp" />
 
         <ImageView
