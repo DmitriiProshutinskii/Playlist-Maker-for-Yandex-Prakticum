@@ -4,88 +4,36 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3772E7"
+    android:background="@color/mainActivityBg"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="start"
-        android:layout_marginEnd="52dp"
-        android:layout_marginBottom="24dp"
-        android:paddingStart="4dp"
-        android:paddingTop="4dp"
-        android:paddingEnd="52dp"
-        android:paddingBottom="4dp"
+        style="@style/PlaylistToolbar"
         app:title="@string/playlist_maker"
-        app:titleMarginBottom="12dp"
-        app:titleMarginStart="12dp"
-        app:titleMarginTop="10dp"
-        app:titleTextColor="@color/white" />
+        android:layout_marginBottom="24dp"
+        app:titleTextColor="@color/YPWhite" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/search_button"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:elegantTextHeight="true"
-        android:fontFamily="@font/audiowide"
-        android:foreground="?attr/selectableItemBackground"
-        android:insetLeft="16dp"
-        android:insetRight="16dp"
-        android:insetBottom="16dp"
-        android:text="@string/Search"
-        android:textColor="@color/black"
-        android:textFontWeight="500"
-        android:textSize="22sp"
-        app:backgroundTint="@color/white"
-        app:cornerRadius="16dp"
-        app:icon="@drawable/search"
-        app:iconGravity="textStart"
-        app:iconSize="24dp"
-        app:iconTint="@color/black" />
+        style="@style/MainScreenButton"
+        android:text="@string/search"
+        app:icon="@drawable/ic_search_24"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/media_button"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:insetBottom="16dp"
-        android:insetRight="16dp"
-        android:insetLeft="16dp"
-        android:layout_weight="1"
-        android:text="@string/Media"
-        android:textColor="@color/black"
-        android:textFontWeight="500"
-        android:textSize="22sp"
-        app:backgroundTint="@color/white"
-        app:cornerRadius="16dp"
-        app:icon="@drawable/music"
-        app:iconGravity="textStart"
-        app:iconSize="24dp"
-        app:iconTint="@color/black" />
+        style="@style/MainScreenButton"
+        android:text="@string/media"
+        app:icon="@drawable/ic_music_24"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settings_button"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        style="@style/MainScreenButton"
+        android:text="@string/settings"
         android:insetBottom="24dp"
-        android:insetRight="16dp"
-        android:insetLeft="16dp"
-        android:layout_weight="1"
-        android:fontFamily="@font/audiowide"
-        android:text="@string/Settings"
-        android:textColor="@color/black"
-        android:textFontWeight="500"
-        android:textSize="22sp"
-        app:backgroundTint="@color/white"
-        app:cornerRadius="16dp"
-        app:icon="@drawable/settings"
-        app:iconGravity="textStart"
-        app:iconSize="24dp"
-        app:iconTint="@color/black" />
+        app:icon="@drawable/ic_settings_24"/>
 
 
 </LinearLayout>
