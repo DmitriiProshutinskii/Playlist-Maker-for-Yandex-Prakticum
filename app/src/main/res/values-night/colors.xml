@@ -6,6 +6,7 @@
     <color name="surface">#1A1B22</color>
     <color name="settingsIcon">@color/YPWhite</color>
     <color name="onSurface">@color/YPWhite</color>
+    <color name="onSurfaceMuted">@color/YPWhite</color>
     <color name="searchBarSurface">@color/YPWhite</color>
     <color name="searchBarOnSurface">@color/YPBlack</color>
     <color name="searchBarOnSurfaceAlt">@color/YPBlack</color>
