@@ -20,6 +20,7 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var searchEditText: EditText
     private lateinit var clearButton: ImageView
+    private lateinit var adapter: TrackAdapter
     private var searchValue: String = SEARCH_DEF
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,14 +45,26 @@ class SearchActivity : AppCompatActivity() {
             hideKeyboard()
         }
 
+        adapter = TrackAdapter()
         val recyclerView = findViewById<RecyclerView>(R.id.search_content)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = TrackAdapter(mockTracks.toList())
+        recyclerView.adapter = adapter
+
+        searchEditText.requestFocus()
+        showKeyboard()
 
         searchEditText.doOnTextChanged { s, _, _, _ ->
             clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
             searchValue = s.toString()
-            // TODO: perform search
+            val filtered = if (searchValue.isBlank()) {
+                emptyList()
+            } else {
+                mockTracks.filter {
+                    it.trackName.contains(searchValue, ignoreCase = true) ||
+                        it.artistName.contains(searchValue, ignoreCase = true)
+                }
+            }
+            adapter.updateTracks(filtered)
         }
     }
 
@@ -64,6 +77,11 @@ class SearchActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         searchValue = savedInstanceState.getString(SEARCH_VALUE, SEARCH_DEF)
         searchEditText.setText(searchValue)
+    }
+
+    private fun showKeyboard() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(searchEditText, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun hideKeyboard() {
