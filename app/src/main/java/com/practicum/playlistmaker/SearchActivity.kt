@@ -10,7 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doOnTextChanged
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
+import com.practicum.playlistmaker.domain.TrackAdapter
+import com.practicum.playlistmaker.domain.mockTracks
 
 class SearchActivity : AppCompatActivity() {
 
@@ -22,7 +26,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_search)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.search_main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -40,6 +44,10 @@ class SearchActivity : AppCompatActivity() {
             hideKeyboard()
         }
 
+        val recyclerView = findViewById<RecyclerView>(R.id.search_content)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = TrackAdapter(mockTracks.toList())
+
         searchEditText.doOnTextChanged { s, _, _, _ ->
             clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
             searchValue = s.toString()
@@ -47,17 +55,13 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        searchEditText = findViewById(R.id.search_edit_text)
         outState.putString(SEARCH_VALUE, searchValue)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        searchEditText = findViewById(R.id.search_edit_text)
         searchValue = savedInstanceState.getString(SEARCH_VALUE, SEARCH_DEF)
         searchEditText.setText(searchValue)
     }
