@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.domain
+package com.practicum.playlistmaker.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

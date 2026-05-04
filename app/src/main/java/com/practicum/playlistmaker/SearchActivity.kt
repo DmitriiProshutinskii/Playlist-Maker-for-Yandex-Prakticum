@@ -13,8 +13,8 @@ import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
-import com.practicum.playlistmaker.domain.TrackAdapter
-import com.practicum.playlistmaker.domain.mockTracks
+import com.practicum.playlistmaker.presentation.TrackAdapter
+import com.practicum.playlistmaker.presentation.mockTracks
 
 class SearchActivity : AppCompatActivity() {
 
