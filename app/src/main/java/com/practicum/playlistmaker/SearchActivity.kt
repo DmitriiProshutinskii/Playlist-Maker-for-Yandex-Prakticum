@@ -2,9 +2,11 @@ package com.practicum.playlistmaker
 
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,8 +15,14 @@ import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.button.MaterialButton
+import com.practicum.playlistmaker.data.mapper.toDomain
+import com.practicum.playlistmaker.data.network.NetworkService
+import com.practicum.playlistmaker.data.network.dto.TrackListDto
+import retrofit2.Callback
 import com.practicum.playlistmaker.presentation.TrackAdapter
-import com.practicum.playlistmaker.presentation.mockTracks
+import retrofit2.Call
+import retrofit2.Response
 
 class SearchActivity : AppCompatActivity() {
 
@@ -40,6 +48,7 @@ class SearchActivity : AppCompatActivity() {
         searchEditText = findViewById(R.id.search_edit_text)
         clearButton = findViewById(R.id.clear_button)
 
+
         clearButton.setOnClickListener {
             searchEditText.setText("")
             hideKeyboard()
@@ -53,18 +62,22 @@ class SearchActivity : AppCompatActivity() {
         searchEditText.requestFocus()
         showKeyboard()
 
+        searchEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                searchTrack()
+            }
+            false
+        }
         searchEditText.doOnTextChanged { s, _, _, _ ->
             clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
             searchValue = s.toString()
-            val filtered = if (searchValue.isBlank()) {
-                emptyList()
-            } else {
-                mockTracks.filter {
-                    it.trackName.contains(searchValue, ignoreCase = true) ||
-                        it.artistName.contains(searchValue, ignoreCase = true)
-                }
+            if (searchValue.isBlank()) {
+                adapter.updateTracks(emptyList())
             }
-            adapter.updateTracks(filtered)
+        }
+        val updateButton = findViewById<MaterialButton>(R.id.update_button)
+        updateButton.setOnClickListener {
+            searchTrack()
         }
     }
 
@@ -79,6 +92,65 @@ class SearchActivity : AppCompatActivity() {
         searchEditText.setText(searchValue)
     }
 
+    private fun searchTrack() {
+        if (!searchValue.isBlank()) {
+            NetworkService.tracksApiService.search(searchValue).enqueue(object : Callback<TrackListDto>{
+                override fun onResponse(call: Call<TrackListDto>, response: Response<TrackListDto>) {
+                    // Получили ответ от сервера
+                    if (response.isSuccessful) {
+                        // Наш запрос был удачным, получаем наши объекты
+                        val tracks = response.body()
+                        if (tracks == null) {
+                            changeState(SearchScreenStates.FAILURE)
+                        } else {
+                            if (tracks.resultCount == 0) {
+                                changeState(SearchScreenStates.NOT_FOUND)
+                            } else {
+                                changeState(SearchScreenStates.SUCCESS)
+                                adapter.updateTracks(tracks.results.map { it.toDomain() })
+                            }
+                        }
+
+                    } else {
+                        // Сервер отклонил наш запрос с ошибкой
+                        changeState(SearchScreenStates.FAILURE)
+                    }
+                }
+
+                override fun onFailure(call: Call<TrackListDto>, t: Throwable) {
+                    // Не смогли присоединиться к серверу
+                    // Выводим ошибку в лог, что-то пошло не так
+                    t.printStackTrace()
+                    changeState(SearchScreenStates.FAILURE)
+                }
+            })
+        }
+    }
+
+    private fun changeState(state: SearchScreenStates) {
+        val recyclerView = findViewById<RecyclerView>(R.id.search_content)
+        val placeholderNotFound = findViewById<LinearLayout>(R.id.search_placeholderNotFound)
+        val placeholderError = findViewById<LinearLayout>(R.id.search_placeholderError)
+
+        when(state) {
+            SearchScreenStates.SUCCESS -> {
+                recyclerView.visibility = View.VISIBLE
+                placeholderNotFound.visibility = View.GONE
+                placeholderError.visibility = View.GONE
+            }
+            SearchScreenStates.NOT_FOUND -> {
+                recyclerView.visibility = View.GONE
+                placeholderNotFound.visibility = View.VISIBLE
+                placeholderError.visibility = View.GONE
+            }
+            SearchScreenStates.FAILURE -> {
+                recyclerView.visibility = View.GONE
+                placeholderNotFound.visibility = View.GONE
+                placeholderError.visibility = View.VISIBLE
+            }
+        }
+    }
+
     private fun showKeyboard() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(searchEditText, InputMethodManager.SHOW_IMPLICIT)
@@ -89,8 +161,15 @@ class SearchActivity : AppCompatActivity() {
         imm.hideSoftInputFromWindow(searchEditText.windowToken, 0)
     }
 
+
     companion object {
         const val SEARCH_VALUE = "SEARCH_VALUE"
         const val SEARCH_DEF = ""
     }
+}
+
+enum class SearchScreenStates {
+    SUCCESS,
+    NOT_FOUND,
+    FAILURE
 }
