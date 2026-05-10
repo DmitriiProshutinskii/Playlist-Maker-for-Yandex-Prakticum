@@ -13,6 +13,7 @@
     <color name="thumbTint">#00D6C3</color>
     <color name="trackTint">#76EAE0</color>
     <color name="surface">#FFFFFFFF</color>
+    <color name="surfaceMuted">@color/YPLightGray</color>
     <color name="settingsIcon">@color/YPTextGray</color>
     <color name="settingsText">@color/onSurface</color>
     <color name="onSurface">@color/YPBlack</color>
