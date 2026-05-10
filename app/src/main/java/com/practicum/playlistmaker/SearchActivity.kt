@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -113,7 +112,6 @@ class SearchActivity : AppCompatActivity() {
 
                     } else {
                         // Сервер отклонил наш запрос с ошибкой
-                        val errorJson = response.errorBody()?.string()
                         changeState(SearchScreenStates.FAILURE)
                     }
                 }
