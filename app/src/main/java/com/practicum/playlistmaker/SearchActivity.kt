@@ -6,6 +6,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -73,11 +74,12 @@ class SearchActivity : AppCompatActivity() {
                             // Наш запрос был удачным, получаем наши объекты
                             val tracks = response.body()
                             if (tracks == null) {
-                                // TODO: Покажи экран с ошибкой
+                                changeState(SearchScreenStates.FAILURE)
                             } else {
                                 if (tracks.resultCount == 0) {
-                                    // TODO: Покажи экран с пустой заглушкой
+                                    changeState(SearchScreenStates.NOT_FOUND)
                                 } else {
+                                    changeState(SearchScreenStates.SUCCESS)
                                     adapter.updateTracks(tracks.results.map { it.toDomain() })
                                 }
                             }
@@ -85,7 +87,7 @@ class SearchActivity : AppCompatActivity() {
                         } else {
                             // Сервер отклонил наш запрос с ошибкой
                             val errorJson = response.errorBody()?.string()
-                            // TODO: Покажи экран с ошибкой
+                            changeState(SearchScreenStates.FAILURE)
                         }
                     }
 
@@ -93,7 +95,7 @@ class SearchActivity : AppCompatActivity() {
                         // Не смогли присоединиться к серверу
                         // Выводим ошибку в лог, что-то пошло не так
                         t.printStackTrace()
-                        // TODO: Покажи экран с ошибкой
+                        changeState(SearchScreenStates.FAILURE)
                     }
                 })
                 }
@@ -117,6 +119,30 @@ class SearchActivity : AppCompatActivity() {
         searchEditText.setText(searchValue)
     }
 
+    private fun changeState(state: SearchScreenStates) {
+        val recyclerView = findViewById<RecyclerView>(R.id.search_content)
+        val placeholderNotFound = findViewById<LinearLayout>(R.id.search_placeholderNotFound)
+        val placeholderError = findViewById<LinearLayout>(R.id.search_placeholderError)
+
+        when(state) {
+            SearchScreenStates.SUCCESS -> {
+                recyclerView.visibility = View.VISIBLE
+                placeholderNotFound.visibility = View.GONE
+                placeholderError.visibility = View.GONE
+            }
+            SearchScreenStates.NOT_FOUND -> {
+                recyclerView.visibility = View.GONE
+                placeholderNotFound.visibility = View.VISIBLE
+                placeholderError.visibility = View.GONE
+            }
+            SearchScreenStates.FAILURE -> {
+                recyclerView.visibility = View.GONE
+                placeholderNotFound.visibility = View.GONE
+                placeholderError.visibility = View.VISIBLE
+            }
+        }
+    }
+
     private fun showKeyboard() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(searchEditText, InputMethodManager.SHOW_IMPLICIT)
@@ -127,8 +153,15 @@ class SearchActivity : AppCompatActivity() {
         imm.hideSoftInputFromWindow(searchEditText.windowToken, 0)
     }
 
+
     companion object {
         const val SEARCH_VALUE = "SEARCH_VALUE"
         const val SEARCH_DEF = ""
     }
+}
+
+enum class SearchScreenStates {
+    SUCCESS,
+    NOT_FOUND,
+    FAILURE
 }
