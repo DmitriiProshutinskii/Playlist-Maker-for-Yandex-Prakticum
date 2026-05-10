@@ -14,8 +14,13 @@ import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
+import com.practicum.playlistmaker.data.network.NetworkService
+import com.practicum.playlistmaker.data.network.dto.TrackListDto
+import retrofit2.Callback
 import com.practicum.playlistmaker.presentation.TrackAdapter
 import com.practicum.playlistmaker.presentation.mockTracks
+import retrofit2.Call
+import retrofit2.Response
 
 class SearchActivity : AppCompatActivity() {
 
@@ -56,8 +61,24 @@ class SearchActivity : AppCompatActivity() {
 
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                // TODO: ВЫПОЛНЯЙТЕ ПОИСКОВЫЙ ЗАПРОС ЗДЕСЬ
-                true
+                NetworkService.tracksApiService.search(searchValue).enqueue(object : Callback<TrackListDto>{
+                    override fun onResponse(call: Call<TrackListDto>, response: Response<TrackListDto>) {
+                        // Получили ответ от сервера
+                        if (response.isSuccessful) {
+                            // Наш запрос был удачным, получаем наши объекты
+                            val tracks = response.body()
+                        } else {
+                            // Сервер отклонил наш запрос с ошибкой
+                            val errorJson = response.errorBody()?.string()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<TrackListDto>, t: Throwable) {
+                        // Не смогли присоединиться к серверу
+                        // Выводим ошибку в лог, что-то пошло не так
+                        t.printStackTrace()
+                    }
+                })
             }
             false
         }
