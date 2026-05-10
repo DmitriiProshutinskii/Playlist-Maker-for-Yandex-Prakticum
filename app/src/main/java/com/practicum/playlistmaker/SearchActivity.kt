@@ -14,11 +14,11 @@ import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
+import com.practicum.playlistmaker.data.mapper.toDomain
 import com.practicum.playlistmaker.data.network.NetworkService
 import com.practicum.playlistmaker.data.network.dto.TrackListDto
 import retrofit2.Callback
 import com.practicum.playlistmaker.presentation.TrackAdapter
-import com.practicum.playlistmaker.presentation.mockTracks
 import retrofit2.Call
 import retrofit2.Response
 
@@ -61,15 +61,31 @@ class SearchActivity : AppCompatActivity() {
 
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (searchValue.isBlank()) {
+                    adapter.updateTracks(emptyList())
+                } else {
+
+
                 NetworkService.tracksApiService.search(searchValue).enqueue(object : Callback<TrackListDto>{
                     override fun onResponse(call: Call<TrackListDto>, response: Response<TrackListDto>) {
                         // Получили ответ от сервера
                         if (response.isSuccessful) {
                             // Наш запрос был удачным, получаем наши объекты
                             val tracks = response.body()
+                            if (tracks == null) {
+                                // TODO: Покажи экран с ошибкой
+                            } else {
+                                if (tracks.resultCount == 0) {
+                                    // TODO: Покажи экран с пустой заглушкой
+                                } else {
+                                    adapter.updateTracks(tracks.results.map { it.toDomain() })
+                                }
+                            }
+
                         } else {
                             // Сервер отклонил наш запрос с ошибкой
                             val errorJson = response.errorBody()?.string()
+                            // TODO: Покажи экран с ошибкой
                         }
                     }
 
@@ -77,23 +93,16 @@ class SearchActivity : AppCompatActivity() {
                         // Не смогли присоединиться к серверу
                         // Выводим ошибку в лог, что-то пошло не так
                         t.printStackTrace()
+                        // TODO: Покажи экран с ошибкой
                     }
                 })
+                }
             }
             false
         }
         searchEditText.doOnTextChanged { s, _, _, _ ->
             clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
             searchValue = s.toString()
-            val filtered = if (searchValue.isBlank()) {
-                emptyList()
-            } else {
-                mockTracks.filter {
-                    it.trackName.contains(searchValue, ignoreCase = true) ||
-                        it.artistName.contains(searchValue, ignoreCase = true)
-                }
-            }
-            adapter.updateTracks(filtered)
         }
     }
 
