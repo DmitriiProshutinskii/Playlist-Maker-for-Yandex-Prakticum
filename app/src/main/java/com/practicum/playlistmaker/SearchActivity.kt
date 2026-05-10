@@ -71,6 +71,9 @@ class SearchActivity : AppCompatActivity() {
         searchEditText.doOnTextChanged { s, _, _, _ ->
             clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
             searchValue = s.toString()
+            if (searchValue.isBlank()) {
+                adapter.updateTracks(emptyList())
+            }
         }
         val updateButton = findViewById<MaterialButton>(R.id.update_button)
         updateButton.setOnClickListener {
@@ -90,9 +93,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchTrack() {
-        if (searchValue.isBlank()) {
-            adapter.updateTracks(emptyList())
-        } else {
+        if (!searchValue.isBlank()) {
             NetworkService.tracksApiService.search(searchValue).enqueue(object : Callback<TrackListDto>{
                 override fun onResponse(call: Call<TrackListDto>, response: Response<TrackListDto>) {
                     // Получили ответ от сервера

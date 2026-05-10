@@ -8,6 +8,6 @@ import java.util.Locale
 fun TrackDto.toDomain(): Track = Track(
     trackName = trackName,
     artistName = artistName,
-    trackTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis),
+    trackTimeMillis = trackTimeMillis,
     artworkUrl100 = artworkUrl100,
 )
