@@ -2,6 +2,7 @@ package com.practicum.playlistmaker
 
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
@@ -53,6 +54,13 @@ class SearchActivity : AppCompatActivity() {
         searchEditText.requestFocus()
         showKeyboard()
 
+        searchEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // TODO: ВЫПОЛНЯЙТЕ ПОИСКОВЫЙ ЗАПРОС ЗДЕСЬ
+                true
+            }
+            false
+        }
         searchEditText.doOnTextChanged { s, _, _, _ ->
             clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
             searchValue = s.toString()

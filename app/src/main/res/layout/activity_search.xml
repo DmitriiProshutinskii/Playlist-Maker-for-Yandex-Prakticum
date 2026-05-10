@@ -48,14 +48,15 @@
             android:background="@android:color/transparent"
             android:fontFamily="@font/ys_display_regular"
             android:hint="@string/search_hint"
-            android:imeOptions="actionSearch"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             android:inputType="text"
             android:maxLines="1"
-            android:singleLine="true"
             android:textColor="@color/YPBlack"
             android:textColorHint="@color/searchBarOnSurface"
             android:textCursorDrawable="@drawable/cursor_blue"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            />
 
         <ImageView
             android:id="@+id/clear_button"
