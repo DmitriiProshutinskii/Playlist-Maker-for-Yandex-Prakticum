@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -15,6 +16,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.button.MaterialButton
 import com.practicum.playlistmaker.data.mapper.toDomain
 import com.practicum.playlistmaker.data.network.NetworkService
 import com.practicum.playlistmaker.data.network.dto.TrackListDto
@@ -47,6 +49,7 @@ class SearchActivity : AppCompatActivity() {
         searchEditText = findViewById(R.id.search_edit_text)
         clearButton = findViewById(R.id.clear_button)
 
+
         clearButton.setOnClickListener {
             searchEditText.setText("")
             hideKeyboard()
@@ -62,49 +65,17 @@ class SearchActivity : AppCompatActivity() {
 
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (searchValue.isBlank()) {
-                    adapter.updateTracks(emptyList())
-                } else {
-
-
-                NetworkService.tracksApiService.search(searchValue).enqueue(object : Callback<TrackListDto>{
-                    override fun onResponse(call: Call<TrackListDto>, response: Response<TrackListDto>) {
-                        // Получили ответ от сервера
-                        if (response.isSuccessful) {
-                            // Наш запрос был удачным, получаем наши объекты
-                            val tracks = response.body()
-                            if (tracks == null) {
-                                changeState(SearchScreenStates.FAILURE)
-                            } else {
-                                if (tracks.resultCount == 0) {
-                                    changeState(SearchScreenStates.NOT_FOUND)
-                                } else {
-                                    changeState(SearchScreenStates.SUCCESS)
-                                    adapter.updateTracks(tracks.results.map { it.toDomain() })
-                                }
-                            }
-
-                        } else {
-                            // Сервер отклонил наш запрос с ошибкой
-                            val errorJson = response.errorBody()?.string()
-                            changeState(SearchScreenStates.FAILURE)
-                        }
-                    }
-
-                    override fun onFailure(call: Call<TrackListDto>, t: Throwable) {
-                        // Не смогли присоединиться к серверу
-                        // Выводим ошибку в лог, что-то пошло не так
-                        t.printStackTrace()
-                        changeState(SearchScreenStates.FAILURE)
-                    }
-                })
-                }
+                searchTrack()
             }
             false
         }
         searchEditText.doOnTextChanged { s, _, _, _ ->
             clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
             searchValue = s.toString()
+        }
+        val updateButton = findViewById<MaterialButton>(R.id.update_button)
+        updateButton.setOnClickListener {
+            searchTrack()
         }
     }
 
@@ -117,6 +88,44 @@ class SearchActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         searchValue = savedInstanceState.getString(SEARCH_VALUE, SEARCH_DEF)
         searchEditText.setText(searchValue)
+    }
+
+    private fun searchTrack() {
+        if (searchValue.isBlank()) {
+            adapter.updateTracks(emptyList())
+        } else {
+            NetworkService.tracksApiService.search(searchValue).enqueue(object : Callback<TrackListDto>{
+                override fun onResponse(call: Call<TrackListDto>, response: Response<TrackListDto>) {
+                    // Получили ответ от сервера
+                    if (response.isSuccessful) {
+                        // Наш запрос был удачным, получаем наши объекты
+                        val tracks = response.body()
+                        if (tracks == null) {
+                            changeState(SearchScreenStates.FAILURE)
+                        } else {
+                            if (tracks.resultCount == 0) {
+                                changeState(SearchScreenStates.NOT_FOUND)
+                            } else {
+                                changeState(SearchScreenStates.SUCCESS)
+                                adapter.updateTracks(tracks.results.map { it.toDomain() })
+                            }
+                        }
+
+                    } else {
+                        // Сервер отклонил наш запрос с ошибкой
+                        val errorJson = response.errorBody()?.string()
+                        changeState(SearchScreenStates.FAILURE)
+                    }
+                }
+
+                override fun onFailure(call: Call<TrackListDto>, t: Throwable) {
+                    // Не смогли присоединиться к серверу
+                    // Выводим ошибку в лог, что-то пошло не так
+                    t.printStackTrace()
+                    changeState(SearchScreenStates.FAILURE)
+                }
+            })
+        }
     }
 
     private fun changeState(state: SearchScreenStates) {

@@ -47,7 +47,7 @@
             android:layout_marginEnd="36dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/ys_display_regular"
-            android:hint="@string/search_hint"
+            android:hint="@string/search"
             android:imeOptions="actionDone"
             android:singleLine="true"
             android:inputType="text"
@@ -89,16 +89,17 @@
         android:gravity="center"
         android:visibility="gone"
     >
-    <ImageView
-        android:src="@drawable/tracks_not_found"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-    />
-    <TextView
-        android:text="@string/searchNotFound"
-        style="@style/SystemInfoTitle"
+        <ImageView
+            android:src="@drawable/tracks_not_found"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:paddingBottom="16dp"
         />
-</LinearLayout>
+        <TextView
+            android:text="@string/searchNotFound"
+            style="@style/SystemInfoTitle"
+        />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/search_placeholderError"
@@ -106,14 +107,26 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:visibility="gone">
+
+        >
         <ImageView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:src="@drawable/tracks_error" />
+            android:src="@drawable/tracks_error"
+            android:paddingBottom="16dp"
+        />
+
         <TextView
             android:text="@string/searchError"
-            style="@style/SystemInfoTitle" />
+            style="@style/SystemInfoTitle"
+            android:paddingBottom="24dp"
+        />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/update_button"
+            style="@style/UpdateButton"
+            android:text="@string/update"
+        />
+
     </LinearLayout>
 
 

@@ -11,9 +11,9 @@
     <string name="support_body">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="terms_of_use_url" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
     <string name="search">Поиск</string>
-    <string name="search_hint">Поиск</string>
     <string name="media">Медиатека</string>
     <string name="settings">Настройки</string>
     <string name="searchNotFound">Ничего не нашлось</string>
     <string name="searchError">Проблемы со связью\n\n Загрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="update">Обновить</string>
 </resources>
