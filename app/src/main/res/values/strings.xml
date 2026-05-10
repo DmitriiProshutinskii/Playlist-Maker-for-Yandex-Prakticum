@@ -14,6 +14,6 @@
     <string name="media">Медиатека</string>
     <string name="settings">Настройки</string>
     <string name="searchNotFound">Ничего не нашлось</string>
-    <string name="searchError">Проблемы со связью\n\n Загрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="searchError">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="update">Обновить</string>
 </resources>
