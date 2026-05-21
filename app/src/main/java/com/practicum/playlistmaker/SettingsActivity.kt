@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
