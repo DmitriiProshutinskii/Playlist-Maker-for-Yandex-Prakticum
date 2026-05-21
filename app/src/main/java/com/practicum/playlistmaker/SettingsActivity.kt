@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textview.MaterialTextView
 
 class SettingsActivity : AppCompatActivity() {
@@ -24,6 +25,13 @@ class SettingsActivity : AppCompatActivity() {
         val backButton = findViewById<MaterialToolbar>(R.id.settings_toolbar)
         backButton.setOnClickListener {
             finish()
+        }
+
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+
+        themeSwitcher.isChecked = (applicationContext as App).darkTheme
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
         }
 
         findViewById<MaterialTextView>(R.id.share_app_button).setOnClickListener {

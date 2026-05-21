@@ -18,6 +18,7 @@
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         style="@style/SettingsLine"
+        android:id="@+id/themeSwitcher"
         android:checked="true"
         android:text="@string/dark_theme"
         app:thumbTint="@color/thumbTint"
