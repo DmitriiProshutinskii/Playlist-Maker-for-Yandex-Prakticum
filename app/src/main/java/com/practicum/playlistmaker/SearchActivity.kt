@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.practicum.playlistmaker.data.local.SearchHistory
 import com.practicum.playlistmaker.data.mapper.toDomain
 import com.practicum.playlistmaker.data.network.NetworkService
 import com.practicum.playlistmaker.data.network.dto.TrackListDto
@@ -30,6 +31,10 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var clearButton: ImageView
     private lateinit var adapter: TrackAdapter
     private var searchValue: String = SEARCH_DEF
+
+    private lateinit var searchHistory: SearchHistory
+    private lateinit var historyAdapter: TrackAdapter
+    private lateinit var historyLayout: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,10 +59,33 @@ class SearchActivity : AppCompatActivity() {
             hideKeyboard()
         }
 
-        adapter = TrackAdapter()
+        searchHistory = SearchHistory(getSharedPreferences(PLAYLIST_PREFERENCES, MODE_PRIVATE))
+
+        // Список результатов поиска. При тапе по треку кладём его в историю
+        adapter = TrackAdapter { track ->
+            searchHistory.addToHistory(track)
+        }
         val recyclerView = findViewById<RecyclerView>(R.id.search_content)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+
+        // Список истории: свой адаптер, но та же вёрстка item'а и тот же тап
+        historyAdapter = TrackAdapter { track ->
+            searchHistory.addToHistory(track)
+        }
+        historyLayout = findViewById(R.id.search_history_layout)
+        val historyRecycler = findViewById<RecyclerView>(R.id.search_history)
+        historyRecycler.layoutManager = LinearLayoutManager(this)
+        historyRecycler.adapter = historyAdapter
+
+        findViewById<MaterialButton>(R.id.clear_history_button).setOnClickListener {
+            searchHistory.clear()
+            historyLayout.visibility = View.GONE
+        }
+
+        searchEditText.setOnFocusChangeListener { _, _ ->
+            renderHistory()
+        }
 
         searchEditText.requestFocus()
         showKeyboard()
@@ -74,6 +102,7 @@ class SearchActivity : AppCompatActivity() {
             if (searchValue.isBlank()) {
                 adapter.updateTracks(emptyList())
             }
+            renderHistory()
         }
         val updateButton = findViewById<MaterialButton>(R.id.update_button)
         updateButton.setOnClickListener {
@@ -128,26 +157,62 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun changeState(state: SearchScreenStates) {
+        val historyView = findViewById<View>(R.id.search_history_layout)
         val recyclerView = findViewById<RecyclerView>(R.id.search_content)
         val placeholderNotFound = findViewById<LinearLayout>(R.id.search_placeholderNotFound)
         val placeholderError = findViewById<LinearLayout>(R.id.search_placeholderError)
 
         when(state) {
+            SearchScreenStates.EMPTY -> {
+                historyView.visibility = View.GONE
+                recyclerView.visibility = View.GONE
+                placeholderNotFound.visibility = View.GONE
+                placeholderError.visibility = View.GONE
+            }
+            SearchScreenStates.HISTORY -> {
+                historyView.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+                placeholderNotFound.visibility = View.GONE
+                placeholderError.visibility = View.GONE
+            }
             SearchScreenStates.SUCCESS -> {
+                historyView.visibility = View.GONE
                 recyclerView.visibility = View.VISIBLE
                 placeholderNotFound.visibility = View.GONE
                 placeholderError.visibility = View.GONE
             }
             SearchScreenStates.NOT_FOUND -> {
+                historyView.visibility = View.GONE
                 recyclerView.visibility = View.GONE
                 placeholderNotFound.visibility = View.VISIBLE
                 placeholderError.visibility = View.GONE
             }
             SearchScreenStates.FAILURE -> {
+                historyView.visibility = View.GONE
                 recyclerView.visibility = View.GONE
                 placeholderNotFound.visibility = View.GONE
                 placeholderError.visibility = View.VISIBLE
             }
+        }
+    }
+
+    private fun renderHistory() {
+        val history = searchHistory.getSearchHistory()
+        val canShowHistory = searchEditText.text.isNullOrEmpty()
+                && searchEditText.hasFocus()
+                && history.isNotEmpty()
+
+        when {
+            // поле пустое, в фокусе, история есть — показываем историю
+            canShowHistory -> {
+                historyAdapter.updateTracks(history.reversed())
+                changeState(SearchScreenStates.HISTORY)
+            }
+            // поле пустое, но истории нет или фокус ушёл — чистый экран
+            searchEditText.text.isNullOrEmpty() -> changeState(SearchScreenStates.EMPTY)
+            // поле НЕ пустое: если была видна история — убираем её (пользователь
+            // начал печатать). Результаты поиска при этом не трогаем.
+            historyLayout.visibility == View.VISIBLE -> changeState(SearchScreenStates.EMPTY)
         }
     }
 
@@ -169,6 +234,8 @@ class SearchActivity : AppCompatActivity() {
 }
 
 enum class SearchScreenStates {
+    EMPTY,
+    HISTORY,
     SUCCESS,
     NOT_FOUND,
     FAILURE

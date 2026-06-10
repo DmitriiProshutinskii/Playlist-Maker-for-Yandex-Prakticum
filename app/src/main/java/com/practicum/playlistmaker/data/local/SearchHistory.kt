@@ -7,7 +7,7 @@ import com.practicum.playlistmaker.domain.model.Track
 const val searchHistoryKey = "SEARCH_HISTORY_KEY"
 
 class SearchHistory(val sharedPref: SharedPreferences) {
-    val history: MutableList<Track> = mutableListOf()
+    private val history: MutableList<Track> = mutableListOf()
 
     init {
         restore()
@@ -32,7 +32,7 @@ class SearchHistory(val sharedPref: SharedPreferences) {
     }
 
     private fun save() {
-        val json = Gson().toJson(history, Array<Track>::class.java)
+        val json = Gson().toJson(history)
         sharedPref.edit().putString(searchHistoryKey, json).apply()
     }
 
