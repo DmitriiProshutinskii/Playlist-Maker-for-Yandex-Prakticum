@@ -14,4 +14,6 @@
     <string name="searchNotFound">Nothing was found</string>
     <string name="searchError">Connection problems\n\nDownload failed. Check your internet connection.</string>
     <string name="update">Update</string>
+    <string name="searchHistoryTitle">You\'ve searched</string>
+    <string name="clearHistory">Clear history</string>
 </resources>
