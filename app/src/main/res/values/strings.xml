@@ -16,4 +16,6 @@
     <string name="searchNotFound">Ничего не нашлось</string>
     <string name="searchError">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="update">Обновить</string>
+    <string name="searchHistoryTitle">Вы искали</string>
+    <string name="clearHistory">Очистить историю</string>
 </resources>

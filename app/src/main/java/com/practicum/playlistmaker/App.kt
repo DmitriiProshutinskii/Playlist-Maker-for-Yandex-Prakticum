@@ -20,13 +20,11 @@ class App : Application() {
         } else {
             isDarkTheme()
         }
-
+        // Применяем сохранённую тему при каждом запуске
+        applyTheme(darkTheme)
     }
 
-
-
-    fun switchTheme(darkThemeEnabled: Boolean) {
-        darkTheme = darkThemeEnabled
+    private fun applyTheme(darkThemeEnabled: Boolean) {
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES
@@ -34,6 +32,11 @@ class App : Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+    }
+
+    fun switchTheme(darkThemeEnabled: Boolean) {
+        darkTheme = darkThemeEnabled
+        applyTheme(darkThemeEnabled)
         sharedPrefs
             .edit()
             .putBoolean(PLAYLIST_THEME, darkThemeEnabled)
