@@ -9,7 +9,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+const val PLAYLIST_PREFERENCES = "playlist_preferences"
+
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -19,7 +21,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
 
         val search = findViewById<MaterialButton>(R.id.search_button)
         val media = findViewById<MaterialButton>(R.id.media_button)
@@ -42,15 +43,5 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val settingsActivityIntent = Intent(this, SettingsActivity::class.java)
             startActivity(settingsActivityIntent)
         }
-
-    }
-
-    override fun onClick(p0: View?) {
-//        when (p0?.id) {
-//            R.id.settings_button -> {
-//                val settingsIntent = Intent(this, Settings::class.java)
-//                startActivity(settingsIntent)
-//            }
-//        }
     }
 }
