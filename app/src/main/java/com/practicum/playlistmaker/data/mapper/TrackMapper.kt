@@ -9,4 +9,8 @@ fun TrackDto.toDomain(): Track = Track(
     artistName = artistName,
     trackTimeMillis = trackTimeMillis,
     artworkUrl100 = artworkUrl100,
+    collectionName = collectionName,
+    releaseDate = releaseDate,
+    primaryGenreName = primaryGenreName,
+    country = country
 )

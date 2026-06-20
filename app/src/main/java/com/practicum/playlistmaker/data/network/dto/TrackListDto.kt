@@ -2,4 +2,5 @@ package com.practicum.playlistmaker.data.network.dto
 
 data class TrackListDto(val resultCount: Int, val results: List<TrackDto>)
 
-data class TrackDto(val trackId: String, val trackName: String, val artistName: String, val trackTimeMillis: Int, val artworkUrl100: String)
+
+data class TrackDto(val trackId: String, val trackName: String, val artistName: String, val trackTimeMillis: Int, val artworkUrl100: String, val collectionName: String?, val releaseDate: String?, val primaryGenreName: String, val country: String)
