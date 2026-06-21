@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
+import com.practicum.playlistmaker.data.local.TrackManipulations
 import com.practicum.playlistmaker.domain.model.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -19,6 +20,10 @@ import java.util.Locale
 class TrackActivity : AppCompatActivity() {
 
     private val durationFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
+    private var isPlaying = false
+
+    private lateinit var trackManipulations: TrackManipulations
+    private lateinit var track: Track
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +44,34 @@ class TrackActivity : AppCompatActivity() {
             finish()
             return
         }
-        bind(Gson().fromJson(trackJson, Track::class.java))
+        track = Gson().fromJson(trackJson, Track::class.java)
+        trackManipulations = TrackManipulations(getSharedPreferences(PLAYLIST_PREFERENCES, MODE_PRIVATE))
+
+        bind(track)
+        setupControls()
+    }
+
+    private fun setupControls() {
+        val playButton = findViewById<ImageButton>(R.id.play_button)
+        playButton.setOnClickListener {
+            isPlaying = !isPlaying
+            playButton.setImageResource(
+                if (isPlaying) R.drawable.paused_track else R.drawable.play_track
+            )
+        }
+
+        val favoriteButton = findViewById<ImageButton>(R.id.favorite_button)
+        renderLike(favoriteButton)
+        favoriteButton.setOnClickListener {
+            trackManipulations.tapLikeOnTrack(track)
+            renderLike(favoriteButton)
+        }
+    }
+
+    private fun renderLike(favoriteButton: ImageButton) {
+        favoriteButton.setImageResource(
+            if (trackManipulations.isLiked(track)) R.drawable.liked_track else R.drawable.not_liked_track
+        )
     }
 
     private fun bind(track: Track) {
