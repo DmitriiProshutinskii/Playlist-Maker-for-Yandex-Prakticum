@@ -4,6 +4,9 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.practicum.playlistmaker.domain.model.Track
 
+// Если вдруг в будущем нам нужно будет хранить это не в shared Prefs, мы
+// перенесем это в network слой. Пока что сделал так, чтобы дать интерактивность,
+// но работаь с этим в Activity
 class TrackManipulations(val sharedPrefs: SharedPreferences) {
     private val tracksLiked: MutableSet<String> = mutableSetOf()
 
