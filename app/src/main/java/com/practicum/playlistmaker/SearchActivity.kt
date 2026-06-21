@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -16,7 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.gson.Gson
 import com.practicum.playlistmaker.data.local.SearchHistory
+import com.practicum.playlistmaker.domain.model.Track
 import com.practicum.playlistmaker.data.mapper.toDomain
 import com.practicum.playlistmaker.data.network.NetworkService
 import com.practicum.playlistmaker.data.network.dto.TrackListDto
@@ -64,6 +67,7 @@ class SearchActivity : AppCompatActivity() {
         // Список результатов поиска. При тапе по треку кладём его в историю
         adapter = TrackAdapter { track ->
             searchHistory.addToHistory(track)
+            openTrack(track)
         }
         val recyclerView = findViewById<RecyclerView>(R.id.search_content)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -72,6 +76,7 @@ class SearchActivity : AppCompatActivity() {
         // Список истории: свой адаптер, но та же вёрстка item'а и тот же тап
         historyAdapter = TrackAdapter { track ->
             searchHistory.addToHistory(track)
+            openTrack(track)
         }
         historyLayout = findViewById(R.id.search_history_layout)
         val historyRecycler = findViewById<RecyclerView>(R.id.search_history)
@@ -214,6 +219,12 @@ class SearchActivity : AppCompatActivity() {
             // начал печатать). Результаты поиска при этом не трогаем.
             historyLayout.visibility == View.VISIBLE -> changeState(SearchScreenStates.EMPTY)
         }
+    }
+
+    private fun openTrack(track: Track) {
+        val intent = Intent(this, TrackActivity::class.java)
+        intent.putExtra(TrackActivity.EXTRA_TRACK, Gson().toJson(track))
+        startActivity(intent)
     }
 
     private fun showKeyboard() {

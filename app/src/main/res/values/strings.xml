@@ -18,4 +18,10 @@
     <string name="update">Обновить</string>
     <string name="searchHistoryTitle">Вы искали</string>
     <string name="clearHistory">Очистить историю</string>
+    <string name="trackDuration">Длительность</string>
+    <string name="trackAlbum">Альбом</string>
+    <string name="trackYear">Год</string>
+    <string name="trackGenre">Жанр</string>
+    <string name="trackCountry">Страна</string>
+    <string name="trackProgressDefault" translatable="false">0:00</string>
 </resources>
