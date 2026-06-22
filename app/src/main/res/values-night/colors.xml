@@ -11,4 +11,5 @@
     <color name="searchBarSurface">@color/YPWhite</color>
     <color name="searchBarOnSurface">@color/YPBlack</color>
     <color name="searchBarOnSurfaceAlt">@color/YPBlack</color>
+    <color name="trackButtonsBg">#40FFFFFF</color>
 </resources>

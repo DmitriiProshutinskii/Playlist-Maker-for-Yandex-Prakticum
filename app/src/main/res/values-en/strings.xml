@@ -16,4 +16,9 @@
     <string name="update">Update</string>
     <string name="searchHistoryTitle">You\'ve searched</string>
     <string name="clearHistory">Clear history</string>
+    <string name="trackDuration">Duration</string>
+    <string name="trackAlbum">Album</string>
+    <string name="trackYear">Year</string>
+    <string name="trackGenre">Genre</string>
+    <string name="trackCountry">Country</string>
 </resources>
