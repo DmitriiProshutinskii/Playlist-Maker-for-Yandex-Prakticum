@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -19,8 +20,11 @@ import java.util.Locale
 
 class TrackActivity : AppCompatActivity() {
 
+    private var mediaPlayer = MediaPlayer()
     private val durationFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
-    private var isPlaying = false
+    private var playerState = STATE_DEFAULT
+    private lateinit var playButton: ImageButton
+
 
     private lateinit var trackManipulations: TrackManipulations
     private lateinit var track: Track
@@ -48,16 +52,44 @@ class TrackActivity : AppCompatActivity() {
         trackManipulations = TrackManipulations(getSharedPreferences(PLAYLIST_PREFERENCES, MODE_PRIVATE))
 
         bind(track)
+        playButton = findViewById(R.id.play_button)
         setupControls()
+        preparePlayer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+    }
+
+    private fun preparePlayer() {
+        val previewUrl = track.previewUrl
+        if (previewUrl.isNullOrBlank()) {
+            playButton.isEnabled = false
+            return
+        }
+        mediaPlayer.setDataSource(previewUrl)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            playButton.isEnabled = true
+            playerState = STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            playerState = STATE_PREPARED
+        }
     }
 
     private fun setupControls() {
-        val playButton = findViewById<ImageButton>(R.id.play_button)
         playButton.setOnClickListener {
-            isPlaying = !isPlaying
-            playButton.setImageResource(
-                if (isPlaying) R.drawable.paused_track else R.drawable.play_track
-            )
+            when(playerState) {
+                STATE_PLAYING -> pausePlayer()
+                STATE_PAUSED, STATE_PREPARED -> playPlayer()
+            }
         }
 
         val favoriteButton = findViewById<ImageButton>(R.id.favorite_button)
@@ -66,6 +98,18 @@ class TrackActivity : AppCompatActivity() {
             trackManipulations.tapLikeOnTrack(track)
             renderLike(favoriteButton)
         }
+    }
+
+    private fun playPlayer() {
+        mediaPlayer.start()
+        playerState = STATE_PLAYING
+        playButton.setImageResource(R.drawable.paused_track)
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        playerState = STATE_PAUSED
+        playButton.setImageResource(R.drawable.play_track)
     }
 
     private fun renderLike(favoriteButton: ImageButton) {
@@ -106,5 +150,10 @@ class TrackActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_TRACK = "EXTRA_TRACK"
+
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
     }
 }
