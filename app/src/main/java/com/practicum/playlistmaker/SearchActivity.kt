@@ -2,12 +2,15 @@ package com.practicum.playlistmaker
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -38,6 +41,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchHistory: SearchHistory
     private lateinit var historyAdapter: TrackAdapter
     private lateinit var historyLayout: View
+
+    private var handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { searchTrack() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,6 +112,8 @@ class SearchActivity : AppCompatActivity() {
             searchValue = s.toString()
             if (searchValue.isBlank()) {
                 adapter.updateTracks(emptyList())
+            } else {
+                searchDebounce()
             }
             renderHistory()
         }
@@ -126,8 +134,14 @@ class SearchActivity : AppCompatActivity() {
         searchEditText.setText(searchValue)
     }
 
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
     private fun searchTrack() {
         if (!searchValue.isBlank()) {
+            changeState(SearchScreenStates.LOADING)
             NetworkService.tracksApiService.search(searchValue).enqueue(object : Callback<TrackListDto>{
                 override fun onResponse(call: Call<TrackListDto>, response: Response<TrackListDto>) {
                     // Получили ответ от сервера
@@ -166,6 +180,7 @@ class SearchActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.search_content)
         val placeholderNotFound = findViewById<LinearLayout>(R.id.search_placeholderNotFound)
         val placeholderError = findViewById<LinearLayout>(R.id.search_placeholderError)
+        val progressBar = findViewById<LinearLayout>(R.id.search_progressBar)
 
         when(state) {
             SearchScreenStates.EMPTY -> {
@@ -173,30 +188,42 @@ class SearchActivity : AppCompatActivity() {
                 recyclerView.visibility = View.GONE
                 placeholderNotFound.visibility = View.GONE
                 placeholderError.visibility = View.GONE
+                progressBar.visibility = View.GONE
             }
             SearchScreenStates.HISTORY -> {
                 historyView.visibility = View.VISIBLE
                 recyclerView.visibility = View.GONE
                 placeholderNotFound.visibility = View.GONE
                 placeholderError.visibility = View.GONE
+                progressBar.visibility = View.GONE
+            }
+            SearchScreenStates.LOADING -> {
+                historyView.visibility = View.GONE
+                recyclerView.visibility = View.GONE
+                placeholderNotFound.visibility = View.GONE
+                placeholderError.visibility = View.GONE
+                progressBar.visibility = View.VISIBLE
             }
             SearchScreenStates.SUCCESS -> {
                 historyView.visibility = View.GONE
                 recyclerView.visibility = View.VISIBLE
                 placeholderNotFound.visibility = View.GONE
                 placeholderError.visibility = View.GONE
+                progressBar.visibility = View.GONE
             }
             SearchScreenStates.NOT_FOUND -> {
                 historyView.visibility = View.GONE
                 recyclerView.visibility = View.GONE
                 placeholderNotFound.visibility = View.VISIBLE
                 placeholderError.visibility = View.GONE
+                progressBar.visibility = View.GONE
             }
             SearchScreenStates.FAILURE -> {
                 historyView.visibility = View.GONE
                 recyclerView.visibility = View.GONE
                 placeholderNotFound.visibility = View.GONE
                 placeholderError.visibility = View.VISIBLE
+                progressBar.visibility = View.GONE
             }
         }
     }
@@ -241,12 +268,15 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_VALUE = "SEARCH_VALUE"
         const val SEARCH_DEF = ""
+
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }
 
 enum class SearchScreenStates {
     EMPTY,
     HISTORY,
+    LOADING,
     SUCCESS,
     NOT_FOUND,
     FAILURE
