@@ -2,6 +2,8 @@ package com.practicum.playlistmaker
 
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
@@ -24,6 +26,15 @@ class TrackActivity : AppCompatActivity() {
     private val durationFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
     private var playerState = STATE_DEFAULT
     private lateinit var playButton: ImageButton
+    private lateinit var trackProgress: TextView
+
+    private val progressHandler = Handler(Looper.getMainLooper())
+    private val progressUpdateRunnable = object : Runnable {
+        override fun run() {
+            trackProgress.text = durationFormatter.format(mediaPlayer.currentPosition)
+            progressHandler.postDelayed(this, PROGRESS_UPDATE_DELAY_MS)
+        }
+    }
 
 
     private lateinit var trackManipulations: TrackManipulations
@@ -53,17 +64,21 @@ class TrackActivity : AppCompatActivity() {
 
         bind(track)
         playButton = findViewById(R.id.play_button)
+        trackProgress = findViewById(R.id.track_progress)
         setupControls()
         preparePlayer()
     }
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        if (playerState == STATE_PLAYING) {
+            pausePlayer()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        progressHandler.removeCallbacks(progressUpdateRunnable)
         mediaPlayer.release()
     }
 
@@ -80,7 +95,10 @@ class TrackActivity : AppCompatActivity() {
             playerState = STATE_PREPARED
         }
         mediaPlayer.setOnCompletionListener {
+            progressHandler.removeCallbacks(progressUpdateRunnable)
             playerState = STATE_PREPARED
+            playButton.setImageResource(R.drawable.play_track)
+            trackProgress.text = durationFormatter.format(0)
         }
     }
 
@@ -104,12 +122,14 @@ class TrackActivity : AppCompatActivity() {
         mediaPlayer.start()
         playerState = STATE_PLAYING
         playButton.setImageResource(R.drawable.paused_track)
+        progressHandler.post(progressUpdateRunnable)
     }
 
     private fun pausePlayer() {
         mediaPlayer.pause()
         playerState = STATE_PAUSED
         playButton.setImageResource(R.drawable.play_track)
+        progressHandler.removeCallbacks(progressUpdateRunnable)
     }
 
     private fun renderLike(favoriteButton: ImageButton) {
@@ -155,5 +175,7 @@ class TrackActivity : AppCompatActivity() {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
+
+        private const val PROGRESS_UPDATE_DELAY_MS = 300L
     }
 }
