@@ -156,7 +156,7 @@
         app:layout_constraintTop_toBottomOf="@id/search_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="visible"
+        android:visibility="gone"
         >
         <ProgressBar
             android:layout_width="44dp"

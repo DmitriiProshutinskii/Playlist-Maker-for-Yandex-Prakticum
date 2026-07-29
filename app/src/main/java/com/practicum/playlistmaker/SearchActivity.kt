@@ -8,13 +8,14 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,6 +45,7 @@ class SearchActivity : AppCompatActivity() {
 
     private var handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { searchTrack() }
+    private var isClickAllowed = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,8 +74,10 @@ class SearchActivity : AppCompatActivity() {
 
         // Список результатов поиска. При тапе по треку кладём его в историю
         adapter = TrackAdapter { track ->
-            searchHistory.addToHistory(track)
-            openTrack(track)
+            if (clickDebounce()) {
+                searchHistory.addToHistory(track)
+                openTrack(track)
+            }
         }
         val recyclerView = findViewById<RecyclerView>(R.id.search_content)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -81,8 +85,10 @@ class SearchActivity : AppCompatActivity() {
 
         // Список истории: свой адаптер, но та же вёрстка item'а и тот же тап
         historyAdapter = TrackAdapter { track ->
-            searchHistory.addToHistory(track)
-            openTrack(track)
+            if (clickDebounce()) {
+                searchHistory.addToHistory(track)
+                openTrack(track)
+            }
         }
         historyLayout = findViewById(R.id.search_history_layout)
         val historyRecycler = findViewById<RecyclerView>(R.id.search_history)
@@ -139,6 +145,15 @@ class SearchActivity : AppCompatActivity() {
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (current) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
     private fun searchTrack() {
         if (!searchValue.isBlank()) {
             changeState(SearchScreenStates.LOADING)
@@ -180,7 +195,7 @@ class SearchActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.search_content)
         val placeholderNotFound = findViewById<LinearLayout>(R.id.search_placeholderNotFound)
         val placeholderError = findViewById<LinearLayout>(R.id.search_placeholderError)
-        val progressBar = findViewById<LinearLayout>(R.id.search_progressBar)
+        val progressBar = findViewById<FrameLayout>(R.id.search_progressBar)
 
         when(state) {
             SearchScreenStates.EMPTY -> {
@@ -244,7 +259,7 @@ class SearchActivity : AppCompatActivity() {
             searchEditText.text.isNullOrEmpty() -> changeState(SearchScreenStates.EMPTY)
             // поле НЕ пустое: если была видна история — убираем её (пользователь
             // начал печатать). Результаты поиска при этом не трогаем.
-            historyLayout.visibility == View.VISIBLE -> changeState(SearchScreenStates.EMPTY)
+            historyLayout.isVisible -> changeState(SearchScreenStates.EMPTY)
         }
     }
 
@@ -270,6 +285,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_DEF = ""
 
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
 
